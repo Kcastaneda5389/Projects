@@ -1,0 +1,457 @@
+Part 1: Yelp Dataset Profiling and Understanding
+
+1. Profile the data by finding the total number of records for each of the tables below:
+	
+i. Attribute table = 10,000
+Select Count(*)
+From attribute
+
+ii. Business table =10,000
+Select Count(*)
+From Business
+
+iii. Category table =10,000
+Select Count(*)
+From Category
+
+iv. Checkin table =10,000
+Select Count(*)
+From Checkin
+
+v. elite_years table =10,000
+Select Count(*)
+From Elite_years
+
+vi. friend table = 10,000
+Select Count(*)
+From Friend
+
+vii. hours table =10,000
+Select Count(*)
+From Hours
+
+viii. photo table =10,000
+Select Count(*)
+Form Photo
+
+ix. review table =10,000
+Select Count(*_)
+From Review
+
+x. tip table =10,000
+Select Count(*)
+From Tip
+
+xi. user table =10,000
+Select Count(*)
+From User
+	
+
+
+2. Find the total number of distinct records for the primary keys in each of the tables listed below:
+
+i. Business =10,000
+Select Distinct count(Id)
+From Business
+
+ii. Hours =10,000
+Select Distinct count(business_id)
+From Hours
+
+iii. Category =10,000
+Select Distinct count(business_id)
+From Category
+
+iv. Attribute =10,000
+Select Distinct count(business_id)
+From Attribute
+
+v. Review =10,000
+Select Distinct count(id)
+From Review
+
+vi. Checkin =10,000
+Select Distinct count(business_id)
+From Checkin
+
+vii. Photo =10,000
+Select Distinct count(id)
+From Photo
+
+viii. Tip =10,000
+Select Distinct count(business_id)
+From Tip
+
+ix. User =10,000
+Select Distinct count(id)
+From User
+
+x. Friend =10,000 
+Select Distinct count(user_id)
+From Friend
+
+xi. Elite_years =10,000
+Select Distinct count(user_id)
+From Elite_years
+
+Note: Primary Keys are denoted in the ER-Diagram with a yellow key icon.	
+
+
+
+3. Are there any columns with null values in the Users table? Indicate "yes," or "no."
+
+	Answer:No 
+	
+	
+	SQL code used to arrive at answer:
+	Select *
+	From Users
+	Where * is null 
+	
+	
+
+	
+4. For each table and column listed below, display the smallest (minimum), largest (maximum), and average (mean) value for the following fields:
+
+	i. Table: Review, Column: Stars
+	
+		min: 1		max: 5		avg: 3.7082		
+	
+	ii. Table: Business, Column: Stars
+	
+		min: 1		max: 5		avg: 3.6549
+		
+	
+	iii. Table: Tip, Column: Likes
+	
+		min: 1		max: 2		avg: 0.0144
+		
+	
+	iv. Table: Checkin, Column: Count
+	
+		min: 1		max: 53		avg: 1.9414
+		
+	
+	v. Table: User, Column: Review_count
+	
+		min: 0		max: 2000	avg: 24.2995
+		
+
+
+5. List the cities with the most reviews in descending order:
+
+	SQL code used to arrive at answer:
+	Select City,review_count
+	From Business
+	Goup by city
+	order by review_count desc
+	
+	
+	Copy and Paste the Result Below:
++------------------------+--------------+
+| city                   | review_count |
++------------------------+--------------+
+| Woodmere Village       |          242 |
+| Mount Lebanon          |          138 |
+| Charlotte              |          120 |
+| McMurray               |          112 |
+| North York             |          109 |
+| Enterprise             |           89 |
+| Matthews               |           77 |
+| Munroe Falls           |           74 |
+| Ahwatukee              |           69 |
+| Pittsburgh             |           68 |
+| Woodmere               |           68 |
+| Tolleson               |           65 |
+| Pineville              |           63 |
+| Carnegie               |           61 |
+| Macedonia              |           58 |
+| Markham                |           54 |
+| Whitchurch-Stouffville |           52 |
+| Windsor                |           50 |
+| Goodyear               |           49 |
+| Gibsonia               |           45 |
+| Summerlin              |           44 |
+| Peninsula              |           42 |
+| Richfield              |           42 |
+| Dormont                |           40 |
+| nboulder city          |           40 |
++------------------------+--------------+
+	
+
+	
+6. Find the distribution of star ratings to the business in the following cities:
+
+i. Avon
+
+SQL code used to arrive at answer:
+Select distinct(b.city),r.stars as Star_Rating
+From Business B
+Left Join Review R on b.stars=r.stars
+Where b.city='Avon'
+
+
+Copy and Paste the Resulting Table Below (2 columns – star rating and count):
++------+-------------+
+| city | Star_Rating |
++------+-------------+
+| Avon |        None |
+| Avon |           4 |
+| Avon |           5 |
++------+-------------+
+
+
+ii. Beachwood
+
+SQL code used to arrive at answer:
+Select distinct(b.city),r.stars as Star_Rating
+From Business B
+Left Join Review R on b.stars=r.stars
+Where b.city='Beachwood'
+
+
+Copy and Paste the Resulting Table Below (2 columns – star rating and count):
++-----------+-------------+
+| city      | Star_Rating |
++-----------+-------------+
+| Beachwood |           3 |
+| Beachwood |        None |
+| Beachwood |           5 |
+| Beachwood |           4 |
+| Beachwood |           2 |
++-----------+-------------+
+
+		
+
+
+7. Find the top 3 users based on their total number of reviews:
+		
+	SQL code used to arrive at answer:
+	Select id
+	,name
+	,review_count
+	From User
+	Group by Name
+	Order By review_count desc 
+	Limit 3;
+	
+		
+	Copy and Paste the Result Below:
++------------------------+--------+--------------+
+| id                     | name   | review_count |
++------------------------+--------+--------------+
+| -G7Zkl1wIWBBmD0KRy_sCw | Gerald |         2000 |
+| -K2Tcgh2EKX6e6HqqIrBIQ | .Hon   |         1246 |
+| -gokwePdbXjfS0iF7NsUGA | eric   |         1116 |
++------------------------+--------+--------------+
+		
+
+
+8. Does posing more reviews correlate with more fans?
++------------------------+------------+--------------+------+
+| id                     | name       | review_count | fans |
++------------------------+------------+--------------+------+
+| -G7Zkl1wIWBBmD0KRy_sCw | Gerald     |         2000 |  253 |
+| -K2Tcgh2EKX6e6HqqIrBIQ | .Hon       |         1246 |  101 |
+| -gokwePdbXjfS0iF7NsUGA | eric       |         1116 |   16 |
+| -DFCC64NXgqrxlO8aLU5rg | Roanna     |         1039 |  104 |
+| -kO6984fXByyZm3_6z2JYg | Dominic    |          836 |   37 |
+| -lh59ko3dxChBSZ9U7LfUw | Lissa      |          834 |  120 |
+| -l9giG8TSDBG1jnUBUXp5w | Alison     |          775 |   61 |
+| -dw8f7FLaUmWR7bfJ_Yf0w | Sui        |          754 |   78 |
+| -hxUwfo3cMnLTv-CAaP69A | Crissy     |          676 |   25 |
+| -eVlHbM2KRZQnBqfTXtDvw | Joc        |          652 |   49 |
+| -Hxvjz-t5ttsuH6H1osA4A | Susanna    |          639 |   44 |
+| -ki-qIZHP4zZ2D49-b8ZzA | Karl       |          512 |   19 |
+| -H6X7u_GCtqVXkGZmW7lzQ | Quisha     |          481 |   58 |
+| -bT32tHNq7ngqZNA4Tr8jA | Fancypants |          472 |   15 |
+| -k5yFUChotBMGQgHdFZvLQ | Pinky      |          449 |   32 |
+| -dbM944bfCz-KeUD5gTErw | teena      |          444 |    7 |
+| -H5SGViN4TRLMvbmrLmE2w | Britt      |          426 |   13 |
+| -LhU9PZZKaP_xFa_rjo9jQ | Hanna      |          422 |   40 |
+| -6_qXof2uXZpu8ny3u6VJw | Wesh       |          419 |   12 |
+| -lvWZr6s93aJ56XNZ2MgzQ | Marco      |          403 |    7 |
+| -bLdd0wCh6LnxQ3Z88_5jg | kathleen   |          402 |   38 |
+| --4q8EyqThydQm-eKZpS-A | Kiristen   |          400 |   23 |
+| -hXelY09pOhXGJr4WuyvUQ | Alias      |          379 |   14 |
+| -5lOjA-DymtPai1i8toROA | Princeton  |          376 |   64 |
+| -knxg3ZwObc77tEKnNdL7Q | Renee      |          364 |   54 |
++------------------------+------------+--------------+------+
+Based on the data above, you can see that there is no direct correlation between the amount of reviews you have and the amount of fans. A prime example would be Eric with 1112 review, but only 16 fans. 
+
+	
+9. Are there more reviews with the word "love" or with the word "hate" in them?
+
+	Answer: Love with 1780, hate only had 232. 
+
+	
+	SQL code used to arrive at answer:
+	Select count(text) 
+	From review
+	Where text like '%love%';
+
+	Select count(text)
+	From review
+	Where text like '%hate%'
+
+	
+	
+10. Find the top 10 users with the most fans:
+
+	SQL code used to arrive at answer:
+	Select name,fans
+	from user
+	order by fans desc
+	limit 10;
+	
+	Copy and Paste the Result Below:
++-----------+------+
+| name      | fans |
++-----------+------+
+| Amy       |  503 |
+| Mimi      |  497 |
+| Harald    |  311 |
+| Gerald    |  253 |
+| Christine |  173 |
+| Lisa      |  159 |
+| Cat       |  133 |
+| William   |  126 |
+| Fran      |  124 |
+| Lissa     |  120 |
++-----------+------+
+
+
+	
+	
+11. Is there a strong relationship (or correlation) between having a high number of fans and being listed as "useful" or "funny?" Out of the top 10 users with the highest number of fans, what percent are also listed as “useful” or “funny”?
+
+Key:
+0% - 25% - Low relationship
+26% - 75% - Medium relationship
+76% - 100% - Strong relationship
+	
+	SQL code used to arrive at answer:
+	Select name,fans,funny,useful
+	From User
+	order by fans desc
+	limit 10;
+	
+	Copy and Paste the Result Below:
++-----------+------+--------+--------+
+| name      | fans |  funny | useful |
++-----------+------+--------+--------+
+| Amy       |  503 |   2554 |   3226 |
+| Mimi      |  497 |    138 |    257 |
+| Harald    |  311 | 122419 | 122921 |
+| Gerald    |  253 |   2324 |  17524 |
+| Christine |  173 |   6646 |   4834 |
+| Lisa      |  159 |     13 |     48 |
+| Cat       |  133 |    672 |   1062 |
+| William   |  126 |   9361 |   9363 |
+| Fran      |  124 |   7606 |   9851 |
+| Lissa     |  120 |    150 |    455 |
++-----------+------+--------+--------+
+	
+	There doesn't seem a strong correlation between the number of fans a user has and them listed as useful or funny. 
+	
+	
+
+Part 2: Inferences and Analysis
+
+1. Pick one city and category of your choice and group the businesses in that city or category by their overall star rating. Compare the businesses with 2-3 stars to the businesses with 4-5 stars and answer the following questions. Include your code.
+	
+i. Do the two groups you chose to analyze have a different distribution of hours?
+The city of my choice was Las Vegas. The two groups I will be analyzing are Restaurants and Shopping. According to the data, there is a difference in the distribution of hours between the two. Restaurants are 11am-12pm and Shopping is from 8am-5pm.
+
+ii. Do the two groups you chose to analyze have a different number of reviews?
+Yes! Restaurants have a total of 123 reviews, and shopping has 4 todal reviews. 
+         
+         
+iii. Are you able to infer anything from the location data provided between these two groups? Explain.
+Based off the addresses provided, I used google maps to get a better idea of the location of the shops. The restaurant is located in a location that there has potential for more foot traffic, and major streets are in the area. Shopping is located in a less populated area with single streets. 
+
+
+SQL code used for analysis:
+SELECT Distinct(b.city)
+,b.review_count
+,b.address
+,c.category
+,r.stars
+,h.hours
+FROM Business B
+INNER JOIN Category C
+    on b.id=c.business_id
+INNER JOIN Review R
+    on b.stars=r.stars
+Inner JOIN Hours H
+    on b.id=h.business_id
+Where b.city='Las Vegas'
+Group by r.stars
+
+		
+		
+2. Group businesses based on the ones that are open and the ones that are closed. What differences can you find between the ones that are still open and the ones that are closed? List at least two differences and the SQL code you used to arrive at your answer.
+		
+i. Difference 1: Companies who are currently or open or open later "0" have more reviews than a company that closes early. 
+         
+         
+ii. Difference 2:The categories that stay open are mainly within the food industry--restaurants, food, chocolatiers, bakeries, specialty food. The shops that are closed are more interpersonal related--real estate, apartments, shopping, home services, and health&medical. 
+         
+         
+         
+SQL code used for analysis:
+SELECT b.city
+,b.is_open
+,b.review_count
+,c.category
+,r.stars
+,h.hours
+FROM Business B
+INNER JOIN Category C
+    on b.id=c.business_id
+INNER JOIN Review R
+    on b.stars=r.stars
+Inner JOIN Hours H
+    on b.id=h.business_id
+Where b.city='Las Vegas' and b.is_open='1';
+	
+	
+3. For this last part of your analysis, you are going to choose the type of analysis you want to conduct on the Yelp dataset and are going to prepare the data for analysis.
+
+	
+i. Indicate the type of analysis you chose to do:
+
+I analyzed the pattern between the number of reviews and the average review for businesses within various categories. 
+         
+         
+ii. Write 1-2 brief paragraphs on the type of data you will need for your analysis and why you chose that data:
+
+Based off my findings, there seemed to be two outliers within the spread of the review counts, both of which lead a company to have extreme reviews--2.5 and 5. Not only do these companies not stay open as long as the others, but Beauty&Spas and Shopping rely heavily on customer serivice. I would recommend companies within these categories to find ways to encourage customers to rate their establishment. With an increase in total reviews the average will neutralize. 
+                           
+                  
+iii. Output of your finished dataset:
++-----------+------------------+---------------------+-------+--------------+
+| city      | category         | hours               | stars | review_count |
++-----------+------------------+---------------------+-------+--------------+
+| Las Vegas | Beauty & Spas    | Saturday|8:00-22:00 |   2.5 |            6 |
+| Las Vegas | Restaurants      | Saturday|11:00-0:00 |   3.0 |          123 |
+| Las Vegas | Bars             | Saturday|0:00-0:00  |   3.5 |          105 |
+| Las Vegas | Health & Medical | Saturday|8:00-12:00 |   4.0 |           16 |
+| Las Vegas | Active Life      | Saturday|8:00-16:30 |   4.5 |           32 |
+| Las Vegas | Shopping         | Monday|8:00-17:00   |   5.0 |            4 |
++-----------+------------------+---------------------+-------+--------------+
+         
+         
+iv. Provide the SQL code you used to create your final dataset:
+SELECT b.city
+,c.category
+,h.hours
+,b.stars
+,b.review_count
+FROM Business B
+Inner Join Hours H 
+      on b.id=h.business_id
+Inner Join Category C
+      on b.id=c.business_id
+Where b.city='Las Vegas' 
+Group by b.stars
